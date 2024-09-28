@@ -1,15 +1,15 @@
-import React from 'react'
+"use client";
 
-export default function Signup() {
+
+export default function LoginPage() {
   return (
-    <div>
-        <h1>Signup here</h1>
-        <form>
-            <input type="text" placeholder="Enter your name"/>
-            <input type="email" placeholder="Enter your email"/>
-            <input type="password" placeholder="Enter your password"/>
-            <button>Signup</button>
-        </form>
-    </div>
+    <form>
+      <label htmlFor="email">Email:</label>
+      <input id="email" name="email" type="email" required />
+      <label htmlFor="password">Password:</label>
+      <input id="password" name="password" type="password" required />
+      <button>Log in</button>
+      <button>Sign up</button>
+    </form>
   )
 }
