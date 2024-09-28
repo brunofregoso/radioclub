@@ -18,5 +18,8 @@ const config: Config = {
     require('daisyui'),
 
   ],
+  daisyui: {
+    themes:['luxury','luxury'],
+  },
 };
 export default config;
