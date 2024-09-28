@@ -4,7 +4,7 @@ import Head from 'next/head';
 import React, { useEffect } from "react";
 import Link from "next/link";
 import { supabase } from "./lib/supabase";
-
+import Image from 'next/image';
 
 export default function Home() {
   const getSession = async () => {
@@ -39,15 +39,17 @@ export default function Home() {
 
         <section className="container mx-auto px-4 py-12">
           <div className="text-center">
-            <h2 className="text-4xl font-bold mb-4">Blend Your Music with Friends Seemlessly</h2>
+            <h2 className="text-4xl font-bold mb-4">Blend Your Music with Friends Seamlessly</h2>
             <p className="text-lg">BLND utilizes Spotify & LastFM to mash playlists to create a diversified experience!</p>
-            <Link href="/login">
-             
-            <button className="btn btn-primary">Login</button>
-            </Link>
-            <Link href="/signup">
-            <button className="btn btn-secondary">Signup</button>
-            </Link>
+            <div className="flex justify-center space-x-4 mb-8">
+              <Link href="/login">
+                <button className="btn btn-primary">Login</button>
+              </Link>
+              <Link href="/signup">
+                <button className="btn btn-secondary">Signup</button>
+              </Link>
+            </div>
+            <Image src="/public/sp1.svg" alt="Hero Image" width={1000} height={1000}  />
           </div>
         </section>
 
@@ -59,6 +61,5 @@ export default function Home() {
       </main>
     </body>
     </html>
-    
   );
 }
