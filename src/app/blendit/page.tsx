@@ -19,7 +19,7 @@ export default function Blendit() {
           <option>Friend Playlist 1</option>
         </select>
         <br />
-        <button></button>
+        <button className="btn">Button</button>
       </form>
     </div>
   );
