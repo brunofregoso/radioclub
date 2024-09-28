@@ -12,16 +12,26 @@ export default function Blendit() {
       <Head>
         <title>Blendit</title>
       </Head>
+
+      <h1 className="text-5xl font-bold font-['Planet_Kosmos'] text-center mt-5 mb-5">
+        Blendit
+      </h1>
+
+      <br />
+
+      <h2 className="text-3xl font-bold font-['Planet_Kosmos'] text-center mt-3 mb-3">
+        Blend Your Vibes with Your Friend's Jams – Create the Ultimate Blended Playlist!
+      </h2>
+
       <div
         style={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center', // Centers content horizontally
-          justifyContent: 'center', // Centers content vertically
+          justifyContent: 'flex-start', // Centers content vertically
           height: '100vh', // Full viewport height
         }}
       >
-        <h1 style={{ marginBottom: '20px' }}>Blendit</h1>
         
         <form
           style={{
@@ -33,29 +43,22 @@ export default function Blendit() {
           }}
         >
           {/* First Dropdown */}
-          {/*<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <label>Your Playlist</label>
-            <select
-              id="user_playlist_list"
-              style={{
-                padding: '5px',
-                borderRadius: '5px',
-                border: '1px solid #ccc', // Light border around the dropdown
-                marginTop: '5px',
-                width: '150px',
-              }}
-            >
-              <option>Playlist 1</option>
-            </select>
-          </div> */}
-          <FormControl fullWidth>
+          <FormControl 
+            fullWidth
+            sx={{
+              mb: 2, // Adds margin-bottom spacing between dropdowns
+              width: '300px', // Increases the width of the dropdown
+            }}
+          >
             <InputLabel id="user-playlist-select-label">Playlist</InputLabel>
             <Select
               labelId="user-playlist-select-label"
               id="user-playlist-select"
-              //value={age}
               label="Playlist"
-              //onChange={handleChange}
+              sx={{
+                backgroundColor: 'white', // Makes the dropdown background white
+                color: 'black', // Changes the text color inside the dropdown to black
+              }}
             >
               <MenuItem value={10}>playlist 1</MenuItem>
               <MenuItem value={20}>playlist 2</MenuItem>
@@ -64,30 +67,16 @@ export default function Blendit() {
           </FormControl>
 
           {/* Second Dropdown */}
-          {/* <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <label>Friend</label>
-            <select
-              id="friend_list"
-              style={{
-                padding: '5px',
-                borderRadius: '5px',
-                border: '1px solid #ccc', // Light border around the dropdown
-                marginTop: '5px',
-                width: '150px',
-              }}
-            >
-              <option>Friend 1</option>
-            </select>
-          </div> */}
-
           <FormControl fullWidth>
             <InputLabel id="user-friend-select-label">Friend</InputLabel>
             <Select
               labelId="user-friend-select-label"
               id="user-friend-select"
-              //value={age}
               label="Playlist"
-              //onChange={handleChange}
+              sx={{
+                backgroundColor: 'white', // Makes the dropdown background white
+                color: 'black', // Changes the text color inside the dropdown to black
+              }}
             >
               <MenuItem value={10}>playlist 1</MenuItem>
               <MenuItem value={20}>playlist 2</MenuItem>
@@ -96,29 +85,16 @@ export default function Blendit() {
           </FormControl>
 
           {/* Third Dropdown */}
-          {/* <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <label>Friend Playlist</label>
-            <select
-              id="friend_playlist_menu"
-              style={{
-                padding: '5px',
-                borderRadius: '5px',
-                border: '1px solid #ccc', // Light border around the dropdown
-                marginTop: '5px',
-                width: '150px',
-              }}
-            >
-              <option>Friend Playlist 1</option>
-            </select>
-          </div> */}
           <FormControl fullWidth>
-            <InputLabel id="user-friend-playlist-select-label">Playlist</InputLabel>
+            <InputLabel id="user-friend-playlist-select-label">Friend Playlist</InputLabel>
             <Select
               labelId="user-friend-playlist-select-label"
               id="user-friend-playlist-select"
-              //value={age}
               label="Friend Playlist"
-              //onChange={handleChange}
+              sx={{
+                backgroundColor: 'white', // Makes the dropdown background white
+                color: 'black', // Changes the text color inside the dropdown to black
+              }}
             >
               <MenuItem value={10}>playlist 1</MenuItem>
               <MenuItem value={20}>playlist 2</MenuItem>
