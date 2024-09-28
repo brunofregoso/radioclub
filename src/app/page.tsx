@@ -7,7 +7,7 @@ export default function Home() {
       <h1>Welcome to BLND!</h1>
       <div>
         <Link href="/welcome" passHref>
-          <button style={{ margin: "15px" }}>Login</button>
+          <button style={{ margin: "15px" }} className="inline-block cursosr-pointer rounded-md bg-gray-800">Login</button>
         </Link>
         <button style={{ margin: "15px" }}>Signup</button>
       </div>
