@@ -1,17 +1,8 @@
 import React from 'react';
 
-export default function GradientForm() {
+export default function Blendit() {
   return (
-    <div
-      style={{
-        height: '100vh', // Ensures it covers the entire viewport height
-        background: 'linear-gradient(to bottom, black, gold)', // Creates the gradient
-        display: 'flex', // Centers the content vertically and horizontally
-        justifyContent: 'center',
-        alignItems: 'center',
-        color: 'white', // Sets text color to white for better visibility
-      }}
-    >
+    <div>
       <form>
         <label>Your Playlist</label>
         <select id="user_playlist_list">
@@ -28,7 +19,7 @@ export default function GradientForm() {
           <option>Friend Playlist 1</option>
         </select>
         <br />
-        <button></button>
+        <button className="btn">Button</button>
       </form>
     </div>
   );
