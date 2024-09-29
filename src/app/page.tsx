@@ -29,7 +29,7 @@ export default function Home() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "spotify",
         options: {
-          redirectTo: "http://localhost:3000/blendit",
+          redirectTo: "http://blnd.miami/blendit",
           scopes: 'playlist-modify-public playlist-modify-private',
         },
       });
