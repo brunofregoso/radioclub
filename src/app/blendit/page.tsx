@@ -117,6 +117,18 @@ export default function Blendit() {
     }
   };
 
+  const logout = async () => {
+    try {
+      let { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      console.log("Logged out successfully");
+      router.push("/")
+    } catch (error) {
+      console.log("Error signing out", error);
+    }
+  };
+  
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -201,6 +213,7 @@ export default function Blendit() {
         </form>
         <button onClick={handleBlendClick}>Blend</button>
         <button onClick={handleUploadSpotify}>Upload to Spotify</button>
+        <button onClick={logout}>logout</button>
       </div>
     </>
   );
