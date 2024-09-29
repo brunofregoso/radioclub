@@ -22,4 +22,5 @@ const config: Config = {
     themes:['luxury','luxury'],
   },
 };
+
 export default config;
