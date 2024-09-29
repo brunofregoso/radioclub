@@ -13,7 +13,7 @@ export async function middleware(req: NextRequest) {
     } = await supabase.auth.getSession();
 
     // Allow requests to the login page without a session
-    const isLoginPage = req.nextUrl.pathname === "/login";
+    const isLoginPage = req.nextUrl.pathname === "/";
 
     // Log session for debugging
     console.log("Session data:", session);
