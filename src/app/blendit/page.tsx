@@ -149,10 +149,26 @@ export default function Blendit() {
         <title>Blendit</title>
       </Head>
 
-      <h1 className="text-5xl font-bold font-['Planet_Kosmos'] text-center mt-5 mb-5">
-        Blendit
-      </h1>
-
+      <div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: '80px',
+  }}
+>
+  <h1 
+    className="cursor-pointer italic font-extrabold text-6xl"
+    style={{
+      textAlign: 'center',
+    }}
+  >
+    blnd
+  </h1>
+  
+  {/* Rest of your code here */}
+</div>
       <h2 className="text-3xl font-bold font-['Planet_Kosmos'] text-center mt-3 mb-3">
         Blend Your Vibes with Your Friend&aposs Jams – Create the Ultimate Blended Playlist!
       </h2>
@@ -221,9 +237,32 @@ export default function Blendit() {
             </Select>
           </FormControl>
         </form>
-        <button onClick={handleBlendClick}>Blend</button>
-        <button onClick={handleUploadSpotify}>Upload to Spotify</button>
-        <button onClick={logout}>logout</button>
+
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '20px',
+            marginTop: '20px'
+          }}
+        >
+          <button 
+            className="btn max-w-3xl w-40 text-xl font-bold bg-slate-200 hover:text-slate-200 hover:bg-yellow-500" 
+            onClick={handleBlendClick}
+          >
+            Blend
+          </button>
+          <button 
+            className="btn max-w-3xl w-52 text-xl font-bold bg-slate-200 hover:text-slate-200 hover:bg-yellow-500" 
+            onClick={handleUploadSpotify}
+          >
+            Upload to Spotify
+          </button>
+          <button className="btn max-w-3xl w-40 text-xl font-bold bg-slate-200 hover:text-slate-200 hover:bg-yellow-500" 
+            onClick={logout}
+          >Logout
+          </button>
+        </div>
       </div>
     </>
   );
