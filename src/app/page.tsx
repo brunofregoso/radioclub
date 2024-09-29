@@ -44,6 +44,9 @@ export default function Home() {
         if (event === 'SIGNED_IN' && session) {
           console.log("User logged in:", session.user);
 
+          // Sync the user's profile with Supabase
+          await syncUserProfile(session.user);
+
           // Redirect to dashboard after successful login
           router.push("/dashboard");
         }
@@ -52,6 +55,50 @@ export default function Home() {
       console.log("Error logging in:", error);
     }
   };
+
+  // Function to sync the user profile
+ // Function to sync the user profile
+const syncUserProfile = async (user) => {
+  console.log("Attempting to sync user profile:", user); // Debug statement
+
+  const { id, email, user_metadata } = user;
+  try {
+    // Check if the profile already exists
+    const { data: existingProfile, error: selectError } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (selectError) {
+      console.error("Error checking for existing profile:", selectError);
+    }
+
+    // If the profile doesn't exist, insert it
+    if (!existingProfile) {
+      const { error: insertError } = await supabase.from('profiles').insert([
+        {
+          id,
+          email,
+          display_name: user_metadata.full_name || user_metadata.name || "Unknown User",
+          spotify_id: user_metadata.spotify_id || user_metadata.sub,
+          avatar_url: user_metadata.avatar_url || "",
+        },
+      ]);
+
+      if (insertError) {
+        console.error('Error inserting profile:', insertError);
+      } else {
+        console.log("Profile successfully inserted");
+      }
+    } else {
+      console.log("Profile already exists:", existingProfile);
+    }
+  } catch (error) {
+    console.error("Error syncing user profile:", error);
+  }
+};
+
 
   return (
     <html data-theme="luxury">
