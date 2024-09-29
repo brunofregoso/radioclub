@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "../lib/supabase"; // Your Supabase client
+import { supabase } from "../lib/supabase";
 import { getUserAccessToken } from "../api/getUser";
 import { getUserPlaylist } from "../api/getPlaylist";
-import { getUserTracks } from "../api/getTracks"; // Ensure this is imported
+import { getUserTracks } from "../api/getTracks";
 import React from 'react';
 import Head from 'next/head';
 import Box from '@mui/material/Box';
@@ -13,6 +13,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { createPlaylist } from "../api/createPlaylist";
+import { getRandomCombination } from "../lib/blendlogic";
+import { addPlaylist } from "../api/addPlaylist";
 
 export default function Blendit() {
   const router = useRouter();
@@ -20,6 +22,7 @@ export default function Blendit() {
   const [playlists, setPlaylists] = useState([]);
   const [selectedPlaylist1, setSelectedPlaylist1] = useState('');
   const [selectedPlaylist2, setSelectedPlaylist2] = useState('');
+  const [blendedUris, setBlendedUris] = useState<string[]>([]); // State for storing blended URIs
 
   useEffect(() => {
     const checkSession = async () => {
@@ -47,7 +50,6 @@ export default function Blendit() {
     fetchUserPlaylists();
   }, []);
 
-  // Update the event handler to differentiate between playlist selections
   const handlePlaylistChange1 = (event: SelectChangeEvent) => {
     setSelectedPlaylist1(event.target.value as string);
   };
@@ -65,8 +67,13 @@ export default function Blendit() {
     try {
       const userTracks1 = await getUserTracks(selectedPlaylist1);
       const userTracks2 = await getUserTracks(selectedPlaylist2);
-      console.log("User tracks fetched:", { userTracks1, userTracks2 });
-      // Handle the blending logic with both userTracks1 and userTracks2
+      const trackUris1 = userTracks1.items.map((item: any) => item.track.uri);
+      const trackUris2 = userTracks2.items.map((item: any) => item.track.uri);
+
+      const blnd = getRandomCombination(trackUris1, trackUris2);
+      setBlendedUris(blnd); // Save the blended URIs to state
+
+      console.log("Blended URIs:", blnd);
     } catch (error) {
       console.error("Error fetching user tracks:", error);
       alert("Failed to fetch user tracks.");
@@ -74,18 +81,38 @@ export default function Blendit() {
   };
 
   const handleUploadSpotify = async () => {
+    if (blendedUris.length === 0) {
+      alert("Please blend the playlists first.");
+      return;
+    }
+
     try {
       const accessToken = await getUserAccessToken();
       const userID = accessToken.id;
+
+      // Create a new playlist
       const data = {
         userID: userID,
-        name: "blended",
-        description: "playlist created by blnd",
+        name: "Blended Playlist",
+        description: "Playlist created by Blendit",
         public: false,
       };
-      createPlaylist(data);
+      const createdPlaylist = await createPlaylist(data);
+      const playlistID = createdPlaylist.id;
+
+      console.log("Created playlist ID:", playlistID);
+
+      // Add the blended URIs to the new playlist
+      const playdata = {
+        playlistID: playlistID,
+        uris: blendedUris,
+        position: 0,
+      };
+      await addPlaylist(playdata);
+
+      console.log("Playlist successfully updated with blended tracks.");
     } catch (error) {
-      console.error("Error creating playlist", error);
+      console.error("Error creating playlist:", error);
       alert("Failed to create playlist.");
     }
   };
@@ -127,10 +154,7 @@ export default function Blendit() {
           }}
         >
           {/* User Playlist Dropdown */}
-          <FormControl 
-            fullWidth
-            sx={{ mb: 2, width: '300px' }}
-          >
+          <FormControl fullWidth sx={{ mb: 2, width: '300px' }}>
             <InputLabel id="user-playlist-select-label">Playlist</InputLabel>
             <Select
               labelId="user-playlist-select-label"
