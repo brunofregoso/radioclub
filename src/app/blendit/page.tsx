@@ -14,12 +14,12 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { createPlaylist } from "../api/createPlaylist";
 
-
 export default function Blendit() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [playlists, setPlaylists] = useState([]);
-  const [selectedPlaylist, setSelectedPlaylist] = useState('');
+  const [selectedPlaylist1, setSelectedPlaylist1] = useState('');
+  const [selectedPlaylist2, setSelectedPlaylist2] = useState('');
 
   useEffect(() => {
     const checkSession = async () => {
@@ -47,20 +47,26 @@ export default function Blendit() {
     fetchUserPlaylists();
   }, []);
 
-  const handlePlaylistChange = (event: SelectChangeEvent) => {
-    setSelectedPlaylist(event.target.value as string);
+  // Update the event handler to differentiate between playlist selections
+  const handlePlaylistChange1 = (event: SelectChangeEvent) => {
+    setSelectedPlaylist1(event.target.value as string);
+  };
+
+  const handlePlaylistChange2 = (event: SelectChangeEvent) => {
+    setSelectedPlaylist2(event.target.value as string);
   };
 
   const handleBlendClick = async () => {
-    if (!selectedPlaylist) {
-      alert("Please select a playlist.");
+    if (!selectedPlaylist1 || !selectedPlaylist2) {
+      alert("Please select both playlists.");
       return;
     }
 
     try {
-      const userTracks = await getUserTracks(selectedPlaylist);
-      console.log("User tracks fetched:", userTracks);
-      // Handle the user tracks as needed
+      const userTracks1 = await getUserTracks(selectedPlaylist1);
+      const userTracks2 = await getUserTracks(selectedPlaylist2);
+      console.log("User tracks fetched:", { userTracks1, userTracks2 });
+      // Handle the blending logic with both userTracks1 and userTracks2
     } catch (error) {
       console.error("Error fetching user tracks:", error);
       alert("Failed to fetch user tracks.");
@@ -76,14 +82,13 @@ export default function Blendit() {
         name: "blended",
         description: "playlist created by blnd",
         public: false,
-      }
+      };
       createPlaylist(data);
-      // Handle the user tracks as needed
     } catch (error) {
       console.error("Error creating playlist", error);
-      alert("Failed to fetch user tracks.");
+      alert("Failed to create playlist.");
     }
-  }
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -121,6 +126,7 @@ export default function Blendit() {
             borderRadius: '10px',
           }}
         >
+          {/* User Playlist Dropdown */}
           <FormControl 
             fullWidth
             sx={{ mb: 2, width: '300px' }}
@@ -129,9 +135,9 @@ export default function Blendit() {
             <Select
               labelId="user-playlist-select-label"
               id="user-playlist-select"
-              value={selectedPlaylist}
+              value={selectedPlaylist1}
               label="Playlist"
-              onChange={handlePlaylistChange}
+              onChange={handlePlaylistChange1}
               sx={{ backgroundColor: 'white', color: 'black' }}
             >
               {playlists.length > 0 ? (
@@ -146,27 +152,15 @@ export default function Blendit() {
             </Select>
           </FormControl>
 
-          {/* Static Friend Dropdown */}
+          {/* Friend Playlist Dropdown */}
           <FormControl fullWidth>
-            <InputLabel id="user-friend-select-label">Friend</InputLabel>
+            <InputLabel id="friend-playlist-select-label">Friend Playlist</InputLabel>
             <Select
-              labelId="user-friend-select-label"
-              id="user-friend-select"
-              label="Friend"
-              sx={{ backgroundColor: 'white', color: 'black' }}
-            >
-              <MenuItem value={10}>Friend 1</MenuItem>
-              <MenuItem value={20}>Friend 2</MenuItem>
-              <MenuItem value={30}>Friend 3</MenuItem>
-            </Select>
-          </FormControl>
-
-          <FormControl fullWidth>
-            <InputLabel id="user-friend-playlist-select-label">Friend Playlist</InputLabel>
-            <Select
-              labelId="user-friend-playlist-select-label"
-              id="user-friend-playlist-select"
+              labelId="friend-playlist-select-label"
+              id="friend-playlist-select"
+              value={selectedPlaylist2}
               label="Friend Playlist"
+              onChange={handlePlaylistChange2}
               sx={{ backgroundColor: 'white', color: 'black' }}
             >
               {playlists.length > 0 ? (
