@@ -14,7 +14,7 @@ export default function Dashboard() {
 
       if (!session) {
         // Redirect to login if session is not available
-        router.push("/login");
+        router.push("/");
       } else {
         // Allow access if session exists
         setLoading(false);
