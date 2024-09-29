@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { supabase } from "../lib/supabase"; // Your Supabase client
 import { getUserAccessToken } from "../api/getUser";
 import { getUserPlaylist } from "../api/getPlaylist";
+import { getUserTracks } from "../api/getTracks"; // Ensure this is imported
 import React from 'react';
 import Head from 'next/head';
 import Box from '@mui/material/Box';
@@ -11,18 +12,19 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { createPlaylist } from "../api/createPlaylist";
+
 
 export default function Blendit() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [playlists, setPlaylists] = useState([]); // State to hold playlists
-  const [selectedPlaylist, setSelectedPlaylist] = useState(''); // State to track selected playlist
+  const [playlists, setPlaylists] = useState([]);
+  const [selectedPlaylist, setSelectedPlaylist] = useState('');
 
   useEffect(() => {
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        // Redirect to login if session is not available
         router.push("/");
       } else {
         setLoading(false);
@@ -37,28 +39,55 @@ export default function Blendit() {
       const accessToken = await getUserAccessToken();
       const userID = accessToken.id;
       const fetchedPlaylists = await getUserPlaylist(userID);
-      console.log("fetched playlists is", fetchedPlaylists)
       if (fetchedPlaylists) {
-        const items = fetchedPlaylists.items;
-        console.log("items array is", items)
-        setPlaylists(items); // Set fetched playlists to state
+        setPlaylists(fetchedPlaylists.items);
       }
     };
 
     fetchUserPlaylists();
   }, []);
 
-  useEffect(() => {
-    console.log("Playlists state has been updated:", playlists);
-  }, [playlists]);
-
-  if (loading) {
-    return <div>Loading...</div>; // You can show a loading spinner or message
-  }
-
   const handlePlaylistChange = (event: SelectChangeEvent) => {
     setSelectedPlaylist(event.target.value as string);
   };
+
+  const handleBlendClick = async () => {
+    if (!selectedPlaylist) {
+      alert("Please select a playlist.");
+      return;
+    }
+
+    try {
+      const userTracks = await getUserTracks(selectedPlaylist);
+      console.log("User tracks fetched:", userTracks);
+      // Handle the user tracks as needed
+    } catch (error) {
+      console.error("Error fetching user tracks:", error);
+      alert("Failed to fetch user tracks.");
+    }
+  };
+
+  const handleUploadSpotify = async () => {
+    try {
+      const accessToken = await getUserAccessToken();
+      const userID = accessToken.id;
+      const data = {
+        userID: userID,
+        name: "blended",
+        description: "playlist created by blnd",
+        public: false,
+      }
+      createPlaylist(data);
+      // Handle the user tracks as needed
+    } catch (error) {
+      console.error("Error creating playlist", error);
+      alert("Failed to fetch user tracks.");
+    }
+  }
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
@@ -92,13 +121,9 @@ export default function Blendit() {
             borderRadius: '10px',
           }}
         >
-          {/* First Dropdown for User's Playlist */}
           <FormControl 
             fullWidth
-            sx={{
-              mb: 2,
-              width: '300px',
-            }}
+            sx={{ mb: 2, width: '300px' }}
           >
             <InputLabel id="user-playlist-select-label">Playlist</InputLabel>
             <Select
@@ -107,12 +132,9 @@ export default function Blendit() {
               value={selectedPlaylist}
               label="Playlist"
               onChange={handlePlaylistChange}
-              sx={{
-                backgroundColor: 'white',
-                color: 'black',
-              }}
+              sx={{ backgroundColor: 'white', color: 'black' }}
             >
-                {playlists.length > 0 ? (
+              {playlists.length > 0 ? (
                 playlists.map((playlist) => (
                   <MenuItem key={playlist.id} value={playlist.id}>
                     {playlist.name}
@@ -121,21 +143,17 @@ export default function Blendit() {
               ) : (
                 <MenuItem disabled>No playlists found</MenuItem>
               )}
-
             </Select>
           </FormControl>
 
-          {/* Second Dropdown (Static Example) */}
+          {/* Static Friend Dropdown */}
           <FormControl fullWidth>
             <InputLabel id="user-friend-select-label">Friend</InputLabel>
             <Select
               labelId="user-friend-select-label"
               id="user-friend-select"
               label="Friend"
-              sx={{
-                backgroundColor: 'white',
-                color: 'black',
-              }}
+              sx={{ backgroundColor: 'white', color: 'black' }}
             >
               <MenuItem value={10}>Friend 1</MenuItem>
               <MenuItem value={20}>Friend 2</MenuItem>
@@ -143,17 +161,13 @@ export default function Blendit() {
             </Select>
           </FormControl>
 
-          {/* Third Dropdown (Static Example) */}
           <FormControl fullWidth>
             <InputLabel id="user-friend-playlist-select-label">Friend Playlist</InputLabel>
             <Select
               labelId="user-friend-playlist-select-label"
               id="user-friend-playlist-select"
               label="Friend Playlist"
-              sx={{
-                backgroundColor: 'white',
-                color: 'black',
-              }}
+              sx={{ backgroundColor: 'white', color: 'black' }}
             >
               {playlists.length > 0 ? (
                 playlists.map((playlist) => (
@@ -167,6 +181,8 @@ export default function Blendit() {
             </Select>
           </FormControl>
         </form>
+        <button onClick={handleBlendClick}>Blend</button>
+        <button onClick={handleUploadSpotify}>Upload to Spotify</button>
       </div>
     </>
   );

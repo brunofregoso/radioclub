@@ -31,6 +31,7 @@ export default function Home() {
         provider: "spotify",
         options: {
           redirectTo: "http://localhost:3000/dashboard",
+          scopes: 'playlist-modify-public playlist-modify-private',
         },
       });
 
