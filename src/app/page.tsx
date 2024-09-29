@@ -1,9 +1,7 @@
 "use client";
 import Head from "next/head";
 import React, { useEffect } from "react";
-import Link from "next/link";
 import { supabase } from "./lib/supabase";
-import Image from "next/image";
 import { useRouter } from "next/navigation"; // Updated: Correct hook for navigation
 import Navbar from "./components/Navbar"; // Import Navbar
 

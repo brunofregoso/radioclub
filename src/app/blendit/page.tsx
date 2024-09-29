@@ -7,7 +7,6 @@ import { getUserPlaylist } from "../api/getPlaylist";
 import { getUserTracks } from "../api/getTracks";
 import React from 'react';
 import Head from 'next/head';
-import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -58,27 +57,38 @@ export default function Blendit() {
     setSelectedPlaylist2(event.target.value as string);
   };
 
+  interface Track {
+    uri: string;
+    // Add other properties if necessary
+  }
+  
+  interface UserTrackItem {
+    track: Track;
+  }
+  
   const handleBlendClick = async () => {
     if (!selectedPlaylist1 || !selectedPlaylist2) {
       alert("Please select both playlists.");
       return;
     }
-
+  
     try {
       const userTracks1 = await getUserTracks(selectedPlaylist1);
       const userTracks2 = await getUserTracks(selectedPlaylist2);
-      const trackUris1 = userTracks1.items.map((item: any) => item.track.uri);
-      const trackUris2 = userTracks2.items.map((item: any) => item.track.uri);
-
-      const blnd = getRandomCombination(trackUris1, trackUris2);
+  
+      const trackUris1 = userTracks1.items.map((item: UserTrackItem) => item.track.uri);
+      const trackUris2 = userTracks2.items.map((item: UserTrackItem) => item.track.uri);
+  
+      const blnd: string[] = getRandomCombination(trackUris1, trackUris2);
       setBlendedUris(blnd); // Save the blended URIs to state
-
+  
       console.log("Blended URIs:", blnd);
     } catch (error) {
       console.error("Error fetching user tracks:", error);
       alert("Failed to fetch user tracks.");
     }
   };
+  
 
   const handleUploadSpotify = async () => {
     if (blendedUris.length === 0) {
@@ -119,7 +129,7 @@ export default function Blendit() {
 
   const logout = async () => {
     try {
-      let { error } = await supabase.auth.signOut();
+      const { error } = await supabase.auth.signOut();
       if (error) throw error;
       console.log("Logged out successfully");
       router.push("/")
@@ -144,7 +154,7 @@ export default function Blendit() {
       </h1>
 
       <h2 className="text-3xl font-bold font-['Planet_Kosmos'] text-center mt-3 mb-3">
-        Blend Your Vibes with Your Friend's Jams – Create the Ultimate Blended Playlist!
+        Blend Your Vibes with Your Friend&aposs Jams – Create the Ultimate Blended Playlist!
       </h2>
 
       <div

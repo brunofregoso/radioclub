@@ -1,5 +1,3 @@
-// getUser.js
-import { headers } from 'next/headers';
 import { supabase } from '../lib/supabase';
 
 
@@ -18,6 +16,6 @@ export const getUserAccessToken = async () => {
     console.log("reposoonse is", response)
     return response.json();
   } catch (error) {
-    return 404;
+    return error;
   } 
 };
