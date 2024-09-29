@@ -1,10 +1,13 @@
 // getUser.js
-import { headers } from 'next/headers';
 import { supabase } from '../lib/supabase';
 
+type DataType = {
+    playlistID: string;
+    uris: string[];
+    position: number;
+}
 
-
-export const addPlaylist = async (data) => {
+export const addPlaylist = async (data: DataType) => {
   const { data: { session } } = await supabase.auth.getSession();
   const providerToken = session?.provider_token;
   console.log("accessToken is", providerToken);
@@ -20,6 +23,6 @@ export const addPlaylist = async (data) => {
     console.log("added combined playlist", response)
     return response.json();
   } catch (error) {
-    return 404;
+    return error;
   } 
 };

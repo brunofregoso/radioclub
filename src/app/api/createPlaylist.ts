@@ -1,10 +1,14 @@
-// getUser.js
-import { headers } from 'next/headers';
 import { supabase } from '../lib/supabase';
 
+type DataType = {
+    userID: string;
+    name: string;
+    description: string;
+    public: boolean;
+    // Add other relevant fields based on the API documentation
+  }
 
-
-export const createPlaylist = async (data) => {
+export const createPlaylist = async (data: DataType) => {
   const { data: { session } } = await supabase.auth.getSession();
   const providerToken = session?.provider_token;
   console.log("accessToken is", providerToken);
@@ -20,6 +24,6 @@ export const createPlaylist = async (data) => {
     console.log("created playlist", response)
     return response.json();
   } catch (error) {
-    return 404;
+    return error;
   } 
 };
