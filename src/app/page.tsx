@@ -17,7 +17,7 @@ export default function Home() {
     console.log(session);
     if (session) {
       console.log("User already logged in. Redirecting to dashboard.");
-      router.push("/../dashboard");
+      router.push("/../blendit");
     }
   };
 
@@ -31,7 +31,7 @@ export default function Home() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "spotify",
         options: {
-          redirectTo: "http://localhost:3000/dashboard",
+          redirectTo: "http://localhost:3000/blendit",
           scopes: 'playlist-modify-public playlist-modify-private',
         },
       });
