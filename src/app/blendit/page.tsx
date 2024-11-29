@@ -25,7 +25,7 @@ export default function Blendit() {
   const [selectedPlaylist1, setSelectedPlaylist1] = useState("");
   const [selectedPlaylist2, setSelectedPlaylist2] = useState("");
   const [blendedUris, setBlendedUris] = useState<string[]>([]);
-  const [tracks, setTracks] = useState([]);
+  const [tracksDisplay, setTracks] = useState([]);
 
   useEffect(() => {
     const checkSession = async () => {
@@ -89,6 +89,14 @@ export default function Blendit() {
         (item: UserTrackItem) => item.track.uri
       );
 
+      interface tracksDisplay {
+        tracks: Tracks;
+      }
+
+      interface Tracks {
+        name: string;
+      }
+
       const blnd: string[] = getRandomCombination(trackUris1, trackUris2);
       setBlendedUris(blnd); // Save the blended URIs to state
       const trackIDS = uriToTrackID(blnd);
@@ -96,8 +104,8 @@ export default function Blendit() {
       setTracks(tracksInfo);
       console.log("blended tracks are", tracksInfo);
       if (tracksInfo) {
-        for (let i = 0; i < tracksInfo.tracks.length; i++) {
-          console.log("Track Name:", tracksInfo.tracks[i].name);
+        for (let i = 0; i < tracksDisplay.tracks.length; i++) {
+          console.log("Track Name:", tracksDisplay.tracks[i].name);
         }
       }
     } catch (error) {
@@ -282,12 +290,16 @@ export default function Blendit() {
         <div>
           <ul>
             <li>
-              {tracks.map((track) => (
-                <div key={track.id}>
-                  <h3>{track.name}</h3>
-                  <p>{track.artists[0].name}</p>
-                </div>
-              ))}
+              {tracksDisplay.length > 0  ?(
+                tracksDisplay.map((track) => (
+                  <div key={track.id}>
+                    <h1>{track.name}</h1>
+                    <h2>{track.artists[0].name}</h2>
+                  </div>
+                ))
+              ):(
+                <h1>No tracks found</h1>
+              )}
             </li>
           </ul>
         </div>
