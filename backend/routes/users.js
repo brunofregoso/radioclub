@@ -37,4 +37,22 @@ router
     res.json(data).status(200).send();
   })
 
+
+router 
+    .route(`${prefix}/sendRequest/:userID`)
+    .post((req, res) => {
+        const userID = req.params.userID;
+        console.log("Sending friend request to user: " + userID)
+        res.json({message: "Friend request sent to user: " + userID}).status(200).send();
+    })  
+
+router
+    .route(`${prefix}/acceptRequest/:requestID`)
+    .post((req, res) => {
+        const requestID = req.params.requestID;
+        console.log("Accepted requestiD: ", requestID);
+        res.json({message: "Friend request accepted from id: " + requestID})
+    })
+
+
 module.exports = router;
