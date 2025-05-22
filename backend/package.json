@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "express": "^5.1.0",
+    "pg-promise": "^11.13.0",
+    "redis": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.21"
+  }
+}
