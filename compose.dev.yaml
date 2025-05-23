@@ -6,3 +6,17 @@ services:
     environment:
       POSTGRES_PASSWORD: example
       
+  backend:
+    build:
+      context: ./backend
+      dockerfile: docker/Dockerfile
+    container_name: backend
+    environment: 
+      - NODE_ENV=production
+    ports:
+      - "3000:3000"
+
+  redis:
+    image: redis
+    container_name: redis
+    restart: always
