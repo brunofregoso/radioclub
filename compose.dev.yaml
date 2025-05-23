@@ -1,0 +1,8 @@
+services:
+  postgres:
+    container_name: db
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+      
